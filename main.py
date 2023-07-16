@@ -2,7 +2,7 @@ import sqlalchemy as sq
 import os
 import psycopg2
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
-from models import create_tables, Publisher, Book, Shop, Stock, Sale
+from models import create_tables, get_shops, Publisher, Book, Shop, Stock, Sale
 from pprint import pprint
 
 LOGIN = os.getenv('LOGIN')
@@ -44,10 +44,10 @@ sa4 = Sale(price=50, date_sale='01-01-2022', id_stock=5, count= 7)
 session.add_all([pub1, pub2, pub3, b1, b2, b3, b4, s1, s2, st1, st2, st3, st4, st5, st6, sa1, sa2, sa3, sa4])
 session.commit()
 
-subq = session.query(Book.title, Book.autor, Sale.price * Sale.count, Sale.date_sale).filter(Book.autor.like(input('Введите фамилию автора: '))).subquery()
-
-for c in session.query(Publisher).join(Book.id_publisher).join(Stock.id_book).join(Shop.id).join(Sale.id_stock).join(subq, Sale.id == subq.c.autor).all():
-    print(c)
+# subq = session.query(Book.title, Book.autor, Sale.price * Sale.count, Sale.date_sale).filter(Book.autor.like(input('Введите фамилию автора: '))).subquery()
+#
+# for c in session.query(Publisher).join(Book.id_publisher).join(Stock.id_book).join(Shop.id).join(Sale.id_stock).join(subq, Sale.id == subq.c.autor).all():
+#     print(c)
 
 
 session.close()
